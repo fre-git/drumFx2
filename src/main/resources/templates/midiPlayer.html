@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI Player</title>
+</head>
+<body>
+<h1>MIDI Player</h1>
+<audio id="midiPlayer" controls>
+    <source th:src="@{/path/to/your/midi/file.mid}" type="audio/midi">
+    Your browser does not support the audio element.
+</audio>
+
+<button onclick="playMidi()">Play</button>
+<button onclick="pauseMidi()">Pause</button>
+<button onclick="stopMidi()">Stop</button>
+
+<script th:src="@{/js/script.js}"></script>
+</body>
+</html>

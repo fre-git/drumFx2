@@ -1,0 +1,47 @@
+/* General styling*/
+body {
+    margin: 0;
+    background-image: url('/images/note.jpg');
+    background-size: cover;
+    background-position: right;
+    overflow-x: hidden; /* Prevents horizontal scrolling*/
+}
+
+#loginCard{
+    margin-top: 25%;
+    background-color: #e6e2d3;
+    border-radius: 25px;
+}
+
+
+#offcanvasNavbar{
+        background-color: #e6e2d3;
+}
+
+#dropdown{
+        background-color: #e6e2d3;
+}
+
+
+#navbarSupportedContent{
+    color: #662D91;
+        background-color: #c4b7a6;
+        border-color: #c4b7a6;
+
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin-top: 1rem;
+}
+
+p.lead {
+    font-size: 1.25rem;
+    margin-top: 1rem;
+}
+
+
+
+
+
+
