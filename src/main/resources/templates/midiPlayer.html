@@ -1,21 +1,45 @@
-<!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MIDI Player</title>
-</head>
+    <title>WebMidi.js Quick Start</title>
+    <script src="https://cdn.jsdelivr.net/combine/npm/tone@14.7.58,npm/@magenta/music@1.23.1/es6/core.js,npm/focus-visible@5,npm/html-midi-player@1.4.0"></script></head>
+
 <body>
-<h1>MIDI Player</h1>
-<audio id="midiPlayer" controls>
-    <source th:src="@{/path/to/your/midi/file.mid}" type="audio/midi">
-    Your browser does not support the audio element.
-</audio>
-
-<button onclick="playMidi()">Play</button>
-<button onclick="pauseMidi()">Pause</button>
-<button onclick="stopMidi()">Stop</button>
-
-<script th:src="@{/js/script.js}"></script>
+<h1>WebMidi.js Quick Start</h1>
 </body>
+
+<midi-player
+        src="/midi/QBQ.mid"
+        sound-font visualizer="#myVisualizer">
+</midi-player>
+<midi-visualizer type="piano-roll" id="myVisualizer"></midi-visualizer>
+
+
+
 </html>
+
+
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="en" xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>MIDI Player</title>-->
+<!--</head>-->
+<!--<body>-->
+<!--<h1>MIDI Player</h1>-->
+<!--<audio id="midiPlayer" controls>-->
+<!--    <source th:src="@{/midi/Schism.mid}" type="audio/midi">-->
+<!--    Your browser does not support the audio element.-->
+<!--</audio>-->
+
+<!--<button onclick="playMidi()">Play</button>-->
+<!--<button onclick="pauseMidi()">Pause</button>-->
+<!--<button onclick="stopMidi()">Stop</button>-->
+
+<!--<script th:src="@{/js/script.js}"></script>-->
+<!--</body>-->
+<!--</html>-->
