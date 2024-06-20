@@ -1,20 +1,23 @@
-package com.example1._DrumFx.drumFx.fxApplication;
+package com.example1._DrumFx.drumFx.fxApplication.together;
 
 import com.example1._DrumFx.drumFx.fxApplication.drum.Gui;
-import com.example1._DrumFx.drumFx.fxApplication.drum.MidiHandler;
-import com.example1._DrumFx.drumFx.fxApplication.pianoRollNew.PianoRoll;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-public class AudioDAW extends Application {
-    private MidiHandler midiHandler;
-    private PianoRoll pianoRoll;
+import javax.sound.midi.*;
+
+import static javafx.application.Application.launch;
+
+public class DawApp extends Application {
+    private Midihandler1 midiHandler;
+    private PianoRoll1 pianoRoll;
+    private Sequencer sharedSequencer;
+    private Sequence sharedSequence;
 
     public static void main(String[] args) {
         launch(args);
@@ -27,16 +30,22 @@ public class AudioDAW extends Application {
         BorderPane borderPane = new BorderPane();
         borderPane.setStyle("-fx-background-color: #373737");
 
+        // Initialize shared Sequencer and Sequence
+        try {
+            sharedSequencer = MidiSystem.getSequencer();
+            sharedSequencer.open();
+            sharedSequence = new Sequence(Sequence.PPQ, 24);
+        } catch (MidiUnavailableException | InvalidMidiDataException e) {
+            e.printStackTrace();
+        }
+
         // Initialize Drum GUI
-        midiHandler = new MidiHandler();
+        midiHandler = new Midihandler1(sharedSequencer, sharedSequence);
 
         // Initialize Piano Roll
-//        double canvasWidth = 1650;
-////        double canvasHeight = 400;
-        pianoRoll = new PianoRoll( );
+        pianoRoll = new PianoRoll1(sharedSequencer, sharedSequence);
 
-        Gui drumGui = new Gui(borderPane, midiHandler, pianoRoll);
-
+        GUI1 drumGui = new GUI1(borderPane, midiHandler, pianoRoll);
 
         // Layout for drum and piano roll
         HBox drumBox = drumGui.createDrumBox();

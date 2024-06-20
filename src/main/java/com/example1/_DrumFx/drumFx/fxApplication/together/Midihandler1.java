@@ -1,45 +1,37 @@
-package com.example1._DrumFx.drumFx.fxApplication.drum;
-
-import lombok.Getter;
-import lombok.Setter;
+package com.example1._DrumFx.drumFx.fxApplication.together;
 
 import javax.sound.midi.*;
 
 import java.io.*;
 
-import static javax.sound.midi.ShortMessage.*;
+import static javax.sound.midi.ShortMessage.NOTE_OFF;
+import static javax.sound.midi.ShortMessage.NOTE_ON;
 
-@Getter
-@Setter
-public class MidiHandler {
-
+public class Midihandler1 {
     private int tempo = 90;
-
     private float tempoFact;
     private Sequencer sequencer;
     private Sequence sequence;
     private Track track;
     private final int[] instruments = {35, 42, 46, 38, 49, 39, 50, 47};
 
-    public MidiHandler() {
+    public Midihandler1(Sequencer sequencer, Sequence sequence) {
+        this.sequencer = sequencer;
+        this.sequence = sequence;
         setUpMidi();
     }
 
     private void setUpMidi() {
         try {
-            sequencer = MidiSystem.getSequencer();
-            sequencer.open();
-            sequence = new Sequence(Sequence.PPQ, 4);
             track = sequence.createTrack();
             sequencer.setTempoInBPM(tempo);
             tempoFact = sequencer.getTempoFactor();
-        } catch (MidiUnavailableException | InvalidMidiDataException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     public void buildTrackAndStart(boolean[] checkboxState) {
-
         int[] trackList;
 
         sequence.deleteTrack(track);
@@ -53,20 +45,17 @@ public class MidiHandler {
                 trackList[j] = checkboxState[j + 16 * i] ? key : 0;
             }
 
-            makeTrack(trackList);
-            track.add(makeEvent(ShortMessage.CONTROL_CHANGE, 1, 127, 0, 16));
+            makeTrack(trackList, i);
+            track.add(makeEvent(ShortMessage.CONTROL_CHANGE, 1, 127, 0, 16 * (i + 1)));
         }
 
         track.add(makeEvent(ShortMessage.PROGRAM_CHANGE, 9, 1, 0, 15));
         addTempoEvent(track, tempo);
 
-        // Ensure there is a slight delay at the end
-//        addEndOfTrackEvent(track, sequence.getTickLength() + 1);  // Add a small delay
-
         try {
             sequencer.setSequence(sequence);
             sequencer.setLoopStartPoint(0);
-            sequencer.setLoopEndPoint(sequence.getTickLength());  // Include the added delay
+            sequencer.setLoopEndPoint(sequence.getTickLength() - 1);  // Correctly set the loop endpoint
             sequencer.setLoopCount(Sequencer.LOOP_CONTINUOUSLY);
             System.out.println("Tempo: " + tempo);
 
@@ -76,31 +65,20 @@ public class MidiHandler {
         } catch (InvalidMidiDataException e) {
             e.printStackTrace();
         }
-
     }
 
     public void changeTempo(float tempoMultiplier) {
-
-
         tempo = Math.round(tempo * tempoMultiplier);
         sequencer.setTempoInBPM(tempo);
         updateTempoInSequence(tempo);
-
-//        float tempoFactor = sequencer.getTempoFactor();
-//        tempoFactor = sequencer.getTempoFactor() * tempoMultiplier;
-//        sequencer.setTempoFactor(tempoFactor);
-//        tempo += tempoMultiplier;
-//        sequencer.start();
-//
-//        sequencer.setTempoInBPM(tempo);
     }
 
-    private void makeTrack(int[] list) {
+    private void makeTrack(int[] list, int instrumentIndex) {
         for (int i = 0; i < 16; i++) {
             int key = list[i];
             if (key != 0) {
-                track.add(makeEvent(NOTE_ON, 9, key, 100, i));
-                track.add(makeEvent(NOTE_OFF, 9, key, 100, i + 1));
+                track.add(makeEvent(NOTE_ON, 9, key, 100, i + 16 * instrumentIndex));
+                track.add(makeEvent(NOTE_OFF, 9, key, 100, (i + 1) + 16 * instrumentIndex));
             }
         }
     }
@@ -117,7 +95,6 @@ public class MidiHandler {
         return event;
     }
 
-
     public void stop() {
         if (sequencer.isRunning()) {
             sequencer.stop();
@@ -125,8 +102,7 @@ public class MidiHandler {
         sequencer.setTickPosition(0);
     }
 
-
-    //saving and loading
+    // Save and load methods...
 
     public void saveSequenceToFile(boolean[] checkboxState, File file) {
         try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(file))) {
@@ -146,10 +122,6 @@ public class MidiHandler {
         return checkboxState;
     }
 
-
-
-
-
     public void exportSequenceToMidiFile(File file) {
         try {
             int[] allowedTypes = MidiSystem.getMidiFileTypes(sequence);
@@ -164,7 +136,6 @@ public class MidiHandler {
         }
     }
 
-
     public void loadMidiFromFile(File file) {
         try {
             Sequence loadedSequence = MidiSystem.getSequence(file);
@@ -175,7 +146,6 @@ public class MidiHandler {
             ex.printStackTrace();
         }
     }
-
 
     private void addTempoEvent(Track track, int bpm) {
         MetaMessage tempoMessage = new MetaMessage();
@@ -215,11 +185,5 @@ public class MidiHandler {
             e.printStackTrace();
         }
     }
-
-
-
-
-
-
-
 }
+

@@ -23,7 +23,7 @@ public class DrumApplication extends Application {
         borderPane.setStyle("-fx-background-color: #373737");
 
         midiHandler = new MidiHandler();
-        pianoRoll = new PianoRoll(800, 800);
+//        pianoRoll = new PianoRoll(800, 800);
 
         Gui gui = new Gui(borderPane, midiHandler, pianoRoll);
 
