@@ -1,34 +1,30 @@
 /* General styling*/
 body {
     margin: 0;
-    background-image: url('/images/note.jpg');
+    background-image: url('/images/parchment.jpg');
+    background-color: #222222;
+     color: #eeeeee;
     background-size: cover;
     background-position: right;
     overflow-x: hidden; /* Prevents horizontal scrolling*/
 }
 
-#loginCard{
+#formCard{
     margin-top: 25%;
-    background-color: #e6e2d3;
+    background-color: #E9E4DE;
     border-radius: 25px;
+     color:  #222222;
 }
 
 
 #offcanvasNavbar{
-        background-color: #e6e2d3;
+        background-color: #dddddd;
 }
 
 #dropdown{
         background-color: #e6e2d3;
 }
 
-
-#navbarSupportedContent{
-    color: #662D91;
-        background-color: #c4b7a6;
-        border-color: #c4b7a6;
-
-}
 
 h1 {
     font-size: 2.5rem;
@@ -40,8 +36,82 @@ p.lead {
     margin-top: 1rem;
 }
 
+.navbar {
+    background-color: #E9E4DE;
+
+}
+
+/*
+profile page
+*/
+   .card {
+       background-color: #E9E4DE;
+       border: none;
+   }
+
+
+       .list-group-item {
+           background-color: #E9E4DE;
+           border: none;
+
+       }
+       .text-muted {
+           color: #b5b5b5 !important;
+       }
+       .container-fluid {
+           padding-left: 10%;
+           padding-right: 10%;
+       }
+
+
+       .file-input-container {
+           max-width: 300px; /* Adjust this value as needed */
+       }
+
+       .profile-details .d-flex {
+           justify-content: flex-end;
+       }
+
+       .profile-picture-container {
+           display: flex;
+           flex-direction: column;
+           align-items: flex-end;
+       }
 
 
 
+/*
+    Like button
+*/
+        .like-button {
+            background: none;
+            border: none;
+            color: red;
+            font-size: 1.5rem;
+        }
+
+        .like-button:hover {
+            color: darkred;
+        }
+
+
+/*
+Home page tabs
+*/
+
+     .nav-tabs .nav-link {
+            color: #f8f9fa;
+            font-size: 1.2rem;
+        }
+
+
+
+
+    .profile-picture {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        margin-right: 10px;
+    }
 
 

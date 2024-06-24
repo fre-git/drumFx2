@@ -1,9 +1,8 @@
 package com.example1._DrumFx.drumFx.controller;
 
-
-
+import com.example1._DrumFx.drumFx.dto.MidiTrackDto;
 import com.example1._DrumFx.drumFx.dto.UserDto;
-import com.example1._DrumFx.drumFx.model.User;
+import com.example1._DrumFx.drumFx.service.MidiTrackService;
 import com.example1._DrumFx.drumFx.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,14 +20,16 @@ import java.util.List;
 public class AuthController {
 
     @Autowired
-    private final UserService userService;
+    private UserService userService;
 
-    public AuthController(UserService userService) {
-        this.userService = userService;
-    }
+    @Autowired
+    private MidiTrackService midiTrackService;
+
 
     @GetMapping("/")
-    public String home(){
+    public String home(Model model) {
+        List<MidiTrackDto> topTracksLastMonth = midiTrackService.findTop10TracksLastMonth();
+        model.addAttribute("topTracksLastMonth", topTracksLastMonth);
         return "index";
     }
 
@@ -37,32 +38,18 @@ public class AuthController {
         return "login";
     }
 
-    @GetMapping("/home")
-    public String showHomePage(){
-        return "home";
-    }
-
-//    @PostMapping("/home")
-//    public String loggedIn(){
-//        return "home";
-//    }
-
-
-    // handler method to handle user registration request
     @GetMapping("register")
-    public String showRegistrationForm(Model model){
+    public String showRegistrationForm(Model model) {
         UserDto user = new UserDto();
         model.addAttribute("user", user);
         return "register";
     }
 
-    // handler method to handle register user form submit request
     @PostMapping("/register/save")
     public String registration(@Valid @ModelAttribute("user") UserDto user,
                                BindingResult result,
-                               Model model){
-        User existing = userService.findByEmail(user.getEmail());
-
+                               Model model) {
+        UserDto existing = userService.findByEmail(user.getEmail());
 
         if (existing != null) {
             result.rejectValue("email", null, "There is already an account registered with that email");
@@ -72,7 +59,7 @@ public class AuthController {
             return "register";
         }
         userService.saveUser(user);
-        return "redirect:/register?success";
+        return "redirect:/login?success";
     }
 
 }

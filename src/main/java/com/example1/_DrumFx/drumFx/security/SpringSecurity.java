@@ -28,11 +28,11 @@ public class SpringSecurity {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeHttpRequests((authorize) ->
-                        authorize.requestMatchers("/register/**").permitAll()
-                                .requestMatchers("/register/**", "/login/**", "/index", "/", "/css/**", "/images/**", "/js/**", "/midi/**").permitAll()
+                        authorize.requestMatchers("/register/**", "/register/**", "/login/**", "/index", "/",
+                                        "/css/**", "/images/**", "/js/**", "/midi/**", "/midi", "/soundfonts/**").permitAll()
                                 .requestMatchers("/users").hasRole("ADMIN")
-                                .requestMatchers("/test", "/home", "/midiPlayer").hasAnyRole("ADMIN", "USER")
-
+                                .requestMatchers("/profile/**", "/test", "/home", "/topTenAllTime", "/newTracks", "/midiPlayer", "/upload",
+                                        "/uploadProfilePicture", "/likeTrack").hasAnyRole("USER", "ADMIN")
 
                 ).formLogin(
                         form -> form

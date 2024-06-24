@@ -1,81 +1,67 @@
 package com.example1._DrumFx.drumFx.service;
 
 
-
 import com.example1._DrumFx.drumFx.dto.UserDto;
 import com.example1._DrumFx.drumFx.model.Role;
 import com.example1._DrumFx.drumFx.model.User;
 import com.example1._DrumFx.drumFx.repository.RoleRepository;
 import com.example1._DrumFx.drumFx.repository.UserRepository;
+import com.example1._DrumFx.drumFx.util.DtoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-@Component
+//@Component
 @Service
 public class UserServiceImpl implements UserService {
 
+    @Autowired
     private UserRepository userRepository;
+
+    @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
 
-    @Autowired
-    public UserServiceImpl(UserRepository userRepository,
-                           RoleRepository roleRepository,
-                           PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
-
     @Override
-    public void saveUser(UserDto userDto) {
+    public User saveUser(UserDto userDto) {
         User user = new User();
-        user.setName(userDto.getFirstName() + " " + userDto.getLastName());
+        user.setUsername(userDto.getUsername());
         user.setEmail(userDto.getEmail());
-
-        //encrypt the password
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
-
         Role role;
-        if(userRepository.findAll().isEmpty()){
+        if (userRepository.findAll().isEmpty()) {
             initiateRoles();
-            role = roleRepository.findByName("ROLE_ADMIN");
-
-        } else {
-            role = roleRepository.findByName("ROLE_USER");
         }
+        role = roleRepository.findByName("ROLE_USER");
 
         user.getRoles().add(role);
         userRepository.save(user);
+        return user;
     }
 
     @Override
-    public User findByEmail(String email) {
-        return userRepository.findByEmail(email);
+    public UserDto findByEmail(String email) {
+        User user = userRepository.findByEmail(email);
+        if (user == null) {
+            return null;
+        }
+        return DtoMapper.mapToUserDto(user);
     }
 
     @Override
-    public List<UserDto> findAllUsers() {
-        List<User> users = userRepository.findAll();
-        return users.stream().map((user) -> convertEntityToDto(user))
-                .collect(Collectors.toList());
+    public UserDto findByUsername(String username) {
+        return DtoMapper.mapToUserDto(userRepository.findByUsername(username));
     }
 
-    private UserDto convertEntityToDto(User user){
-        UserDto userDto = new UserDto();
-        String[] name = user.getName().split(" ");
-        userDto.setFirstName(name[0]);
-        userDto.setLastName(name[1]);
-        userDto.setEmail(user.getEmail());
-        return userDto;
+    @Override
+    public void updateUser(UserDto userDto) {
+        User userToUpdate = userRepository.getReferenceById(userDto.getId());
+        userToUpdate.setProfilePicture(userDto.getProfilePicture());
+        userRepository.save(userToUpdate);
     }
-
 
     private void initiateRoles() {
         Role admin = new Role();

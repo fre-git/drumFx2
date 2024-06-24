@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User Profile</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/combine/npm/tone@14.7.58,npm/@magenta/music@1.23.1/es6/core.js,npm/focus-visible@5,npm/html-midi-player@1.4.0"></script>
+    <link th:href="@{/css/style.css}" type="text/css" rel="stylesheet">
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbarContent}"></div>
+
+    <br><br><br><br><br>
+<div class="container-fluid mt-4">
+
+    <h2 class="text-center mb-4">My profile</h2>
+    <div class="row">
+        <!-- Upload New Track  -->
+        <div class="col-md-3 order-md-1 order-2">
+            <div class="upload-track card p-3 mb-4">
+                <h3>Upload New Track</h3>
+                <form action="#" th:action="@{/upload}" method="post" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="file" class="form-label">Choose MIDI file:</label>
+                        <input type="file" id="file" name="file" accept=".mid" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Upload</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- User Details  -->
+        <div class="col-md-9 order-md-2 order-1 mb-8">
+            <div class="profile-details card p-3">
+
+                <div class="col">
+
+                    <div class="d-flex align-items-center">
+
+                        <div class="profile-picture me-3">
+                            <img id="avatar-preview"
+                                 th:if="${user.picture != null and user.picture != ''}"
+                                 th:src="@{'data:image/jpeg;base64,' + ${user.picture}}"
+                                 class="rounded-circle" style="width: 150px; height: 150px;">
+                            <img id="avatar-default"
+                                 th:unless="${user.picture != null and user.picture != ''}"
+                                 th:src="@{/images/drummfxLogo.png}"
+                                 class="rounded-circle" style="width: 150px; height: 150px;">
+                        </div>
+                        <div>
+                            <h1 th:text="${user.username}">Username</h1>
+                            <p class="text-muted font-size-sm" th:text="${user.email}">Email</p>
+
+                            <br><br><br><br><br><br>
+                        </div>
+                    </div>
+                    <div class="profile-picture-container mt-4">
+                        <div class="upload-profile-picture">
+                            <h5>Change Profile Picture</h5>
+                            <form action="#" th:action="@{/uploadProfilePicture}" method="post"
+                                  enctype="multipart/form-data">
+                                <div class="mb-3 file-input-container">
+                                    <label for="profilePicture" class="form-label">Choose new profile picture:</label>
+                                    <input type="file" id="profilePicture" name="profilePicture" accept="image/*"
+                                           class="form-control" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">Upload</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- MIDI Tracks  -->
+            <div class="col-md-12 order-3">
+                <div class="uploaded-tracks mb-4">
+                    <h2>Uploaded Tracks</h2>
+                    <ul class="list-group">
+                        <li th:each="track : ${tracks}" class="list-group-item">
+                            <div>
+                                <p>
+                                    <strong>Track Name:</strong> <span th:text="${track.title}"></span><br>
+                                </p>
+                                <midi-player th:src="@{'/midi/' + ${track.id} + '.mid'}" sound-font
+                                             th:visualizer="'#visualizer-' + ${track.id}"></midi-player>
+                                <midi-visualizer type="piano-roll"
+                                                 th:id="'visualizer-' + ${track.id}"></midi-visualizer>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
+</body>
+</html>
+

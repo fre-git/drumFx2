@@ -11,25 +11,29 @@
 
 </head>
 
-
-
 <body>
 
-
-<nav class="navbar navbar-expand-lg navbar-light" th:fragment="header" style="background-color: #c4b7a6">
+<nav class="navbar navbar-expand-lg navbar-light" th:fragment="header" >
     <div class="container-fluid">
-        <a class="navbar-brand">
-
-        <img src="/images/sol.png" alt="" width="60" height="48" class="d-inline-block align-text-top">
-        DrumFX
+        <a class="navbar-brand"></a>
+        <img src="/images/drummfxLogo.png" alt="" width="110" height="100" class="d-inline-block align-text-top">
         </a>
-        <a class="navbar-brand" th:href="@{/}">Registration and Login</a>
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" th:href="@{/register}">Register</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" th:href="@{/login}">Login</a>
+                </li>
+            </ul>
+        </div>
+
+
     </div>
 </nav>
+
 <br />
 <br />
 <br />
@@ -42,7 +46,7 @@
             <div th:if="${param.logout}">
                 <div class="alert alert-success">You have been logged out.</div>
             </div>
-            <div class="card" id="loginCard">
+            <div class="card" id="formCard">
                 <div class="card-header">
                     <h3 class="text-center">Login Form</h3>
                 </div>
